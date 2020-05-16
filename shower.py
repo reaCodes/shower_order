@@ -42,7 +42,7 @@ def ver_code(image_path):
     # 验证码类型，# 例：1004表示4位字母数字，不同类型收费不同。请准确填写，否则影响识别率。在此查询所有类型 http://www.yundama.com/price.html
     codetype = 1004
     # 超时时间，秒
-    timeout = 60
+    timeout = 30
 
     # 初始化
     yundama = verification_code.YDMHttp(username, password, appid, appkey)
@@ -92,9 +92,11 @@ def shower_order_last_time(username, password, speed):
 def shower_order_specify_time(username, password, speed, order_date, order_times):
     driver = initialize_operation(username, password, speed)
     time.sleep(0.5)
+
     # 南区
-    driver.find_element_by_id("loc_name").click()
+    # driver.find_element_by_id("loc_name").click()
     # time.sleep(0.5)
+
     driver.find_element_by_id("loadmore").click()
     order_elements = driver.find_elements_by_css_selector("[class='pui_user_menu pui_clear']")
 
@@ -102,9 +104,9 @@ def shower_order_specify_time(username, password, speed, order_date, order_times
     today = datetime.date.today()
     tomorrow = today + datetime.timedelta(days=1)
     if order_date == "1":
-        order_date_operation = today.strftime("%m月%d日") + str("南区浴室（男）")
+        order_date_operation = today.strftime("%m月%d日") + str("北区浴室（男）")
     else:
-        order_date_operation = tomorrow.strftime("%m月%d日") + str("南区浴室（男）")
+        order_date_operation = tomorrow.strftime("%m月%d日") + str("北区浴室（男）")
     for order_time in order_times:
         order_date_time_operation = order_date_operation + order_time + str("点档")
         order_date_times_operation.append(order_date_time_operation)
@@ -114,9 +116,11 @@ def shower_order_specify_time(username, password, speed, order_date, order_times
 
         driver.get("https://shower.jiangnan.edu.cn/h5/meeting_signup_list.php")
         time.sleep(spd)
+
         # 南区
-        driver.find_element_by_id("loc_name").click()
-        time.sleep(1)
+        # driver.find_element_by_id("loc_name").click()
+        # time.sleep(0.5)
+
         driver.find_element_by_id("loadmore").click()
         order_elements = driver.find_elements_by_css_selector("[class='pui_user_menu pui_clear']")
 
@@ -146,6 +150,8 @@ def shower_order_specify_time(username, password, speed, order_date, order_times
                     driver.find_element_by_xpath('//*[@class="layui-m-layerbtn"]/span[2]').click()
 
                     # 如果验证失败
+                    # 1. 在打码的时候名额被抢完
+                    # 2. 验证码错误
 
                     ver_code_end = time.time()
                     ver_code_use = ver_code_end - ver_code_start
